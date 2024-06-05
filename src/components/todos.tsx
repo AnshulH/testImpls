@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import * as React from 'react';
 import { useGetTodosQuery, useAddTodosMutation, useDeleteTodosMutation, useEditTodosMutation } from "../store/api";
 import { useDispatch, useSelector } from "react-redux";
 import { initTodos, addToTodoAction, deleteTodoAction, editTodoAction } from "../store/todoreducer";
 
 const Todos = () => {
-    const [textInput, setTextInput] = useState('');
-    const [editId, setEditId] = useState(-1);
-    const [editText, setEditText] = useState('');
+    const [textInput, setTextInput] = React.useState<string>('');
+    const [editId, setEditId] = React.useState<number>(-1);
+    const [editText, setEditText] = React.useState<string>('');
 
-    const {todos, loading, init} = useSelector((state) => state.todos);
+    const {todos, loading, init} = useSelector((state: any) => state.todos);
     const dispatch = useDispatch();
     const { data, error, isLoading } = useGetTodosQuery();
     const [addTodoMutation] = useAddTodosMutation();
@@ -19,11 +19,11 @@ const Todos = () => {
         dispatch(initTodos({todos: data, loading: isLoading, init: true}));
     }
 
-    const getInputText = (event) => {
+    const getInputText = (event: any) => {
         setTextInput(event.target.value);
     }
 
-    const submitEvent = async (text) => {
+    const submitEvent = async (text: string) => {
         const val = await addTodoMutation({id: String(Math.floor(100 * Math.random())), text: text}).unwrap();
         if (val) {
             dispatch(addToTodoAction({id: val.id, text: val.text}));
@@ -31,22 +31,22 @@ const Todos = () => {
         }
     }
 
-    const deleteTodo = async (id) => {
+    const deleteTodo = async (id: string) => {
         const val = await deleteTodoMutation({id: id});
         if (val) {
             dispatch(deleteTodoAction({id: id}));
         }
     }
 
-    const toggleEdit = async (id) => {
+    const toggleEdit = async (id: number) => {
         setEditId(id);
     }
 
-    const getEditText = (event) => {
+    const getEditText = (event: any) => {
         setEditText(event.target.value);
     }
 
-    const constEditTodo = async (id, newText, currentText) => {
+    const constEditTodo = async (id: string, newText: string, currentText: string) => {
         if (newText === '') {
             setEditId(-1);
             return;
@@ -70,7 +70,7 @@ const Todos = () => {
                             <input onChange={getInputText} value={textInput}></input> 
                             <button onClick={async () => await submitEvent(textInput)}> Submit </button>
                         </div>
-                        {todos.map(todo => {
+                        {todos.map((todo: any) => {
                             const isEdit = todo.id === editId
                             return !isEdit ? (
                                 <div id={todo.id} key={todo.id} className="individual-item"> {todo.text} 

@@ -6,11 +6,11 @@ const api = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({ baseUrl: baseUrl }),
     endpoints: (builder) => ({
-      getTodos: builder.query({
+      getTodos: builder.query<any, void>({
         query: () => "todos",
       }),
 
-      addTodos: builder.mutation({
+      addTodos: builder.mutation<any, any>({
         query: (body) => ({
           url: "/todos",
           method: "POST",
@@ -18,18 +18,18 @@ const api = createApi({
         }),
       }),
 
-      deleteTodos: builder.mutation({
+      deleteTodos: builder.mutation<any, { id: string }>({
         query: (todo) => ({
           url: `/todos/${todo.id}`,
           method: "DELETE",
         }),
       }),
 
-      editTodos: builder.mutation({
+      editTodos: builder.mutation<any, { id: string; text: string }>({
         query: (body) => ({
           url: `/todos/${body.id}`,
           method: "PUT",
-          body
+          body: body
         }),
         
       }),
@@ -39,3 +39,4 @@ const api = createApi({
   export const { useGetTodosQuery, useAddTodosMutation, useDeleteTodosMutation, useEditTodosMutation } = api;
   
   export default api;
+
